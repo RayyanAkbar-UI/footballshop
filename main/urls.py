@@ -1,9 +1,7 @@
-from main.views import show_main
+from django.contrib import admin
 from django.urls import path, include
 
-
-app_name = 'main'
-
 urlpatterns = [
-    path('', show_main, name='show_main'),
+    path('admin/', admin.site.urls),
+    path('', include('main.urls')),
 ]
