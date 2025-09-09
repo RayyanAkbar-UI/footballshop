@@ -80,6 +80,7 @@ Link: https://rayyan-akbar-footballshop.pbp.cs.ui.ac.id/
         - Mode Debug (DEBUG): Mengaktifkan atau menonaktifkan mode debug. Ketika DEBUG = True, Django akan menampilkan halaman error yang detail, yang sangat berguna saat pengembangan.
 
 4. Cara Kerja Migrasi Database di Django
+
     Sistem migrasi Django adalah fitur canggih yang berfungsi untuk menjaga skema database tetap sinkron dengan definisi model (models.py) secara terstruktur dan terkontrol versinya. Proses ini bekerja dalam dua langkah utama:
 
         A. makemigrations:
