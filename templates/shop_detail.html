@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ shop.name }}</h1>
+<p>Price: {{ shop.price }}</p>
+<p>Description: {{ shop.description }}</p>
+<p>Quantity: {{ shop.quantity }}</p>
+<img src="{{ shop.thumbnail }}" alt="Thumbnail">
+<br>
+<a href="{% url 'main:delete_item' shop.id %}" onclick="return confirm('Are you sure you want to delete this item?');">
+    <button>Delete Item</button>
+</a>
+{% endblock %}

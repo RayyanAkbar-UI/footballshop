@@ -1,1 +1,45 @@
-<h1>Footall Shop</h1>
+ {% extends 'base.html' %}
+ {% block content %}
+ <h1>Football Shop</h1>
+
+ <h5>NPM: </h5>
+ <p>{{ npm }}<p>
+
+ <h5>Name:</h5>
+ <p>{{ name }}</p>
+
+ <h5>Class:</h5>
+ <p>{{ class }}</p>
+
+ <a href="{% url 'main:create_items' %}">
+  <button>+ Add Item</button>
+</a>
+
+<hr>
+
+{% if not shop_list %}
+<p>Belum ada data barang pada football shop.</p>
+{% else %}
+
+{% for shop in shop_list %}
+<div>
+  <h2><a href="{% url 'main:show_shop' shop.id %}">{{ shop.name }}</a></h2>
+
+  <p><b>{{ shop.get_category_display }} 
+    </p>
+
+  {% if shop.thumbnail %}
+  <img src="{{ shop.thumbnail }}" alt="thumbnail" width="150" height="100">
+  <br />
+  {% endif %}
+
+  <p>{{ shop.content|truncatewords:25 }}...</p>
+
+  <p><a href="{% url 'main:show_shop' shop.id %}"><button>Read More</button></a></p>
+</div>
+
+<hr>
+{% endfor %}
+
+{% endif %}
+ {% endblock content %}
