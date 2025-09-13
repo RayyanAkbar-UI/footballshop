@@ -25,8 +25,8 @@
 <div>
   <h2><a href="{% url 'main:show_shop' item.id %}">{{ item.name }}</a></h2>
 
-  <p><b>{{ item.get_category_display }} 
-    </p>
+  <p><b>{{ item.category }}</b>
+  </p>
 
   {% if item.thumbnail %}
   <img src="{{ item.thumbnail }}" alt="thumbnail" width="150" height="100">
