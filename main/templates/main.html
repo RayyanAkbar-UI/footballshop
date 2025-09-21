@@ -1,45 +1,85 @@
- {% extends 'base.html' %}
- {% block content %}
- <h1>Football Shop</h1>
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="section">
+        <div class="glass rounded-xl p-6 mb-6">
+            <h1 class="text-3xl font-bold mb-4 neural-glow">Football Shop</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="glass rounded-xl p-4">
+                    <h5 class="text-xs uppercase opacity-70 mb-1">NPM:</h5>
+                    <p class="text-lg font-bold">{{ npm }}</p>
+                </div>
+                <div class="glass rounded-xl p-4">
+                    <h5 class="text-xs uppercase opacity-70 mb-1">Name:</h5>
+                    <p class="text-lg font-bold">{{ name }}</p>
+                </div>
+                <div class="glass rounded-xl p-4">
+                    <h5 class="text-xs uppercase opacity-70 mb-1">Class:</h5>
+                    <p class="text-lg font-bold">{{ class }}</p>
+                </div>
+            </div>
 
- <h5>NPM: </h5>
- <p>{{ npm }}<p>
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap gap-3 mb-4">
+                <a href="{% url 'main:create_items' %}" 
+                   class="action-link">
+                    <span class="mr-2">+</span>
+                    Add Item
+                </a>
+                <a href="{% url 'main:show_main' %}?filter=my_items" 
+                   class="action-link">
+                    <span class="mr-2">👤</span>
+                    My Items
+                </a>
+                <a href="{% url 'main:show_main' %}" 
+                   class="action-link">
+                    <span class="mr-2">🌐</span>
+                    All Items
+                </a>
+            </div>
 
- <h5>Name:</h5>
- <p>{{ name }}</p>
+            <!-- Last login -->
+            <p class="text-xs opacity-70">Last connected: {{ last_login }}</p>
+        </div>
+    </div>
 
- <h5>Class:</h5>
- <p>{{ class }}</p>
-
- <a href="{% url 'main:create_items' %}">
-  <button>+ Add Item</button>
-</a>
-
-<hr>
-
-{% if not shop_list %}
-<p>Belum ada data barang pada football shop.</p>
-{% else %}
-
-{% for item in shop_list %}
-<div>
-  <h2><a href="{% url 'main:show_shop' item.id %}">{{ item.name }}</a></h2>
-
-  <p><b>{{ item.category }}</b>
-  </p>
-
-  {% if item.thumbnail %}
-  <img src="{{ item.thumbnail }}" alt="thumbnail" width="150" height="100">
-  <br />
-  {% endif %}
-
-  <p>{{ item.content|truncatewords:25 }}...</p>
-
-  <p><a href="{% url 'main:show_shop' item.id %}"><button>Read More</button></a></p>
+    <!-- Items Grid -->
+    <div class="card-container">
+        {% if not shop_list %}
+        <div class="col-span-full text-center glass rounded-xl p-8">
+            <p class="opacity-70">No items available in the matrix.</p>
+        </div>
+        {% else %}
+            {% for item in shop_list %}
+            <div class="glass card-hover">
+                <div class="card-content">
+                    <h2 class="text-xl font-bold mb-3">
+                        <a href="{% url 'main:show_product' item.id %}" class="hover:text-white">
+                            {{ item.name }}
+                        </a>
+                    </h2>
+                    
+                    {% if item.thumbnail %}
+                    <div class="card-image">
+                        <img src="{{ item.thumbnail }}" alt="thumbnail">
+                    </div>
+                    {% endif %}
+                    
+                    <p class="mb-2"><strong>Price:</strong> {{ item.formatted_price }}</p>
+                    <p class="text-sm mb-4 opacity-70 line-clamp-3">{{ item.description }}</p>
+                    
+                    <div class="card-footer">
+                        <span class="badge">Stock: {{ item.quantity }}</span>
+                        <a href="{% url 'main:show_product' item.id %}" 
+                           class="action-link">
+                            View Details →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 </div>
-
-<hr>
-{% endfor %}
-
-{% endif %}
- {% endblock content %}
+{% endblock content %}

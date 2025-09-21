@@ -2,12 +2,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% block meta %} {% endblock meta %}
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', -apple-system, system-ui, sans-serif;
+            background: #000;
+            color: #e0a3ff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            font-weight: 400;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-<body>
-    {% block content %} {% endblock content %}
+        .neural-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 15% 85%, rgba(75, 0, 130, 0.7) 0%, transparent 50%),
+                radial-gradient(circle at 85% 15%, rgba(139, 37, 99, 0.8) 0%, transparent 50%),
+                radial-gradient(circle at 45% 60%, rgba(128, 0, 128, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 70% 40%, rgba(34, 139, 34, 0.4) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0a 0%, #2d1b3d 50%, #000000 100%);
+            animation: backgroundPulse 14s ease-in-out infinite;
+        }
+
+        /* Neural Lines Animation */
+        .neural-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .neural-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #e0a3ff, transparent);
+            height: 1px;
+            animation: neuralPulse 3s ease-in-out infinite;
+        }
+        
+        .neural-line:nth-child(1) {
+            top: 20%;
+            left: 0;
+            width: 100%;
+            animation-delay: 0s;
+        }
+        
+        .neural-line:nth-child(2) {
+            top: 60%;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, #ff69b4, transparent);
+            animation-delay: -1s;
+        }
+        
+        .neural-line:nth-child(3) {
+            top: 40%;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, #9370db, transparent);
+            animation-delay: -2s;
+        }
+
+        /* Glass Effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass:hover {
+            transform: scale(1.02) translateY(-3px);
+            box-shadow: 0 12px 28px rgba(224, 163, 255, 0.2);
+            border-color: rgba(224, 163, 255, 0.2);
+        }
+
+        /* Glowing Text Effect */
+        .neural-glow {
+            background: linear-gradient(135deg, #e0a3ff 0%, #ff69b4 30%, #9370db 60%, #e0a3ff 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: modernGradient 8s ease infinite;
+            text-shadow: 0 0 15px rgba(224, 163, 255, 0.3);
+        }
+
+        /* Animations */
+        @keyframes backgroundPulse {
+            0%, 100% { filter: brightness(0.9) saturate(1.4) hue-rotate(0deg); }
+            33% { filter: brightness(1.1) saturate(1.7) hue-rotate(15deg); }
+            66% { filter: brightness(1.0) saturate(1.5) hue-rotate(-10deg); }
+        }
+
+        @keyframes modernGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes neuralPulse {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scaleX(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        /* Enhanced Button Styles - Fixed proportions */
+        button, .btn, a[href].button {
+            background: linear-gradient(45deg, #e0a3ff, #ff69b4);
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            line-height: 1;
+        }
+
+        button:hover, .btn:hover, a[href].button:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 12px 24px rgba(224, 163, 255, 0.3);
+        }
+        
+        button:before, .btn:before, a[href].button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        button:hover:before, .btn:hover:before, a[href].button:hover:before {
+            left: 100%;
+        }
+
+        /* Action Link Styles */
+        .action-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            color: #e0a3ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.875rem;
+        }
+        
+        .action-link:hover {
+            background: rgba(224, 163, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(224, 163, 255, 0.2);
+            border-color: rgba(224, 163, 255, 0.2);
+            color: white;
+        }
+
+        /* Enhanced Form Input Styling */
+        input, textarea, select,
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff !important;
+            font-family: inherit;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input::placeholder, textarea::placeholder, select::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input:focus, textarea:focus, select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #e0a3ff;
+            box-shadow: 0 0 20px rgba(224, 163, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08) !important;
+            transform: translateY(-2px);
+            color: #ffffff !important;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Fix for Django admin widgets */
+        .selectmultiple, .select, .vTextField, 
+        .textinput, .numberinput, .emailinput, 
+        .urlinput, .textarea {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #ffffff !important;
+        }
+
+        /* Ensure text in inputs is visible */
+        input, select, textarea {
+            color: #ffffff !important;
+        }
+
+        /* Navigation Animation */
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: #e0a3ff;
+            text-shadow: 0 0 10px rgba(224, 163, 255, 0.5);
+            background: rgba(224, 163, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0.75rem;
+            right: 0.75rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e0a3ff, transparent);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            opacity: 1;
+            bottom: -2px;
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 32px rgba(224, 163, 255, 0.2);
+        }
+        
+        /* Card Container */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Card Content */
+        .card-content {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        /* Card Footer */
+        .card-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Card Image */
+        .card-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: -4px;
+            margin-bottom: 1rem;
+        }
+        
+        .card-image img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .card-hover:hover .card-image img {
+            transform: scale(1.05);
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            background: rgba(224, 163, 255, 0.1);
+            border: 1px solid rgba(224, 163, 255, 0.2);
+            color: #e0a3ff;
+        }
+        
+        /* Error messages */
+        .errorlist {
+            color: #ff4e4e;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        /* Container with consistent spacing */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        /* Sections with consistent spacing */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .card-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+    {% block meta %}
+    {% endblock meta %}
+</head>
+<body class="min-h-screen">
+    <div class="neural-background"></div>
+    
+    <!-- Neural Network Lines -->
+    <div class="neural-lines">
+        <div class="neural-line"></div>
+        <div class="neural-line"></div>
+        <div class="neural-line"></div>
+    </div>
+    
+    <!-- Navbar - Improved proportions -->
+    <nav class="glass fixed top-0 left-0 right-0 z-50 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="{% url 'main:show_main' %}" class="text-xl font-bold neural-glow">
+                Football Shop
+            </a>
+            <div class="flex items-center gap-3">
+                {% if user.is_authenticated %}
+                    <span class="opacity-70 text-sm hidden sm:inline">Welcome, {{ user.username }}</span>
+                    <a href="{% url 'main:logout' %}" class="nav-link text-sm">Logout</a>
+                {% else %}
+                    <a href="{% url 'main:login' %}" class="nav-link text-sm">Login</a>
+                    <a href="{% url 'main:register' %}" class="nav-link text-sm">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content - Added consistent padding -->
+    <main class="pt-16 pb-8">
+        {% block content %}
+        {% endblock content %}
+    </main>
 </body>
 </html>

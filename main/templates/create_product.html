@@ -1,0 +1,41 @@
+{% extends 'base.html' %} 
+{% block content %}
+<div class="container">
+    <div class="max-w-2xl mx-auto">
+        <div class="glass rounded-xl p-6">
+            <a href="{% url 'main:show_main' %}" class="action-link mb-4 inline-flex">
+                <span class="mr-2">←</span>
+                Back to Main
+            </a>
+
+            <h1 class="text-2xl font-bold mb-6 neural-glow">Create New Product</h1>
+
+            <form method="POST" class="space-y-4">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="glass rounded-xl p-4">
+                    <label class="block text-sm uppercase opacity-70 mb-2">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <p class="text-xs opacity-50 mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit" 
+                        class="action-link w-full bg-purple-900/20 hover:bg-purple-900/30 py-3 mt-4">
+                    <span class="mr-2">💾</span>
+                    Save Product
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

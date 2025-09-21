@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="min-h-screen p-6">
+    <div class="max-w-4xl mx-auto">
+        <div class="glass rounded-3xl p-8">
+            <a href="{% url 'main:show_main' %}" class="glass inline-flex items-center px-4 py-2 rounded-xl hover:bg-white/20 transition mb-6">
+                <span class="mr-2">←</span>
+                Return to Matrix
+            </a>
+
+            <h1 class="text-4xl font-bold mb-6 neural-glow">{{ shop.name }}</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="text-xl opacity-70 mb-2">Price Matrix</h3>
+                    <p class="text-2xl font-bold">{{ shop.formatted_price }}</p>
+                </div>
+                
+                <div class="glass rounded-2xl p-6">
+                    <h3 class="text-xl opacity-70 mb-2">Quantum Storage</h3>
+                    <p class="text-2xl font-bold">{{ shop.quantity }} units</p>
+                </div>
+            </div>
+
+            {% if shop.thumbnail %}
+            <div class="glass rounded-2xl p-2 mb-8">
+                <img src="{{ shop.thumbnail }}" 
+                     alt="Neural Scan" 
+                     class="w-full h-64 object-cover rounded-xl opacity-80">
+            </div>
+            {% endif %}
+
+            <div class="glass rounded-2xl p-6 mb-8">
+                <h3 class="text-xl opacity-70 mb-4">Neural Description</h3>
+                <p class="leading-relaxed">{{ shop.description }}</p>
+            </div>
+
+            <a href="{% url 'main:delete_item' shop.id %}" 
+               onclick="return confirm('Confirm data purge from the matrix?');"
+               class="glass inline-flex items-center px-6 py-3 rounded-xl hover:bg-red-500/20 transition">
+                <span class="mr-2">⚠️</span>
+                Purge Data
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
