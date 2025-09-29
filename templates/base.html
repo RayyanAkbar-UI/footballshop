@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,7 +18,9 @@
         
         body {
             font-family: 'Inter', 'Segoe UI', -apple-system, system-ui, sans-serif;
-            background: #000;
+            background: linear-gradient(-45deg, #ff007f, #7f00ff, #0077ff, #00c6ff);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
             color: #e0a3ff;
             overflow-x: hidden;
             min-height: 100vh;
@@ -25,6 +28,18 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .neural-background {
@@ -85,8 +100,9 @@
 
         /* Glass Effects */
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 20, 0.6); /* Sedikit lebih gelap agar kontras dengan background baru */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -385,38 +401,14 @@
     {% block meta %}
     {% endblock meta %}
 </head>
-<body class="min-h-screen">
-    <div class="neural-background"></div>
-    
-    <!-- Neural Network Lines -->
-    <div class="neural-lines">
-        <div class="neural-line"></div>
-        <div class="neural-line"></div>
-        <div class="neural-line"></div>
-    </div>
-    
-    <!-- Navbar - Improved proportions -->
-    <nav class="glass fixed top-0 left-0 right-0 z-50 px-4 py-3">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="{% url 'main:show_main' %}" class="text-xl font-bold neural-glow">
-                Football Shop
-            </a>
-            <div class="flex items-center gap-3">
-                {% if user.is_authenticated %}
-                    <span class="opacity-70 text-sm hidden sm:inline">Welcome, {{ user.username }}</span>
-                    <a href="{% url 'main:logout' %}" class="nav-link text-sm">Logout</a>
-                {% else %}
-                    <a href="{% url 'main:login' %}" class="nav-link text-sm">Login</a>
-                    <a href="{% url 'main:register' %}" class="nav-link text-sm">Register</a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
+<body class="font-sans text-white">
 
-    <!-- Main Content - Added consistent padding -->
-    <main class="pt-16 pb-8">
+    {% include 'navbar.html' %}
+
+    <main class="py-8">
         {% block content %}
         {% endblock content %}
     </main>
+
 </body>
 </html>

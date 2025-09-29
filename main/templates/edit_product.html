@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mx-auto mt-10 p-4">
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold mb-6 neural-glow">Create New Product</h1>
+        <h1 class="text-2xl font-bold mb-6 neural-glow">Edit Product: {{ product.name }}</h1>
         
         <div class="glass rounded-xl p-6">
             <form method="POST" class="space-y-6" enctype="multipart/form-data">
@@ -26,8 +26,8 @@
                 
                 <div>
                     <label class="block text-sm uppercase opacity-70 mb-1">Category</label>
-                    <div x-data="{ open: false, selectedLabel: 'Select a Category' }">
-                        <input type="hidden" name="category" id="id_category_value">
+                    <div x-data="{ open: false, selectedLabel: '{{ product.get_category_display|default:'Select a Category' }}' }">
+                        <input type="hidden" name="category" id="id_category_value" value="{{ product.category }}">
                         <div class="relative mt-1">
                             <button @click="open = !open" type="button" class="glass-button relative w-full cursor-default rounded-md py-2 pl-3 pr-10 text-left shadow-sm sm:text-sm">
                                 <span class="block truncate" x-text="selectedLabel"></span>
@@ -49,15 +49,14 @@
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end mt-6 space-x-4">
-                    <button type="submit" 
-                            class="action-link w-full bg-purple-900/20 hover:bg-purple-900/30 py-3 mt-4">
+                <div class="pt-4">
+                    <button type="submit" class="action-link w-full bg-purple-900/20 hover:bg-purple-900/30 py-3">
                         <span class="mr-2">💾</span>
-                        Save Product
+                        Save Changes
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}

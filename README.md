@@ -287,3 +287,133 @@ Session menyimpan data di sisi server, dan hanya mengirimkan sebuah ID unik (Ses
                 - Pada view halaman utama, saya memodifikasi konteks yang dikirim ke template. Saya menambahkan username dari request.user.username dan nilai cookie last_login yang diambil dari request.COOKIES.get('last_login', 'Ini adalah login pertama Anda!').
 
                 - Di template halaman utama, saya menggunakan tag {% if user.is_authenticated %}. Jika pengguna sudah login, halaman akan menampilkan pesan selamat datang dengan {{ user.username }}, waktu login terakhir dari {{ last_login }}, dan tombol logout. Jika tidak, halaman akan menampilkan tombol untuk login dan registrasi.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+TUGAS 5
+
+1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+    
+    Ketika sebuah elemen HTML memiliki beberapa aturan CSS yang menargetkannya, browser akan menentukan aturan mana yang akan diterapkan berdasarkan urutan prioritas atau spesifisitas (specificity). Aturan dengan spesifisitas yang lebih tinggi akan mengalahkan aturan dengan spesifisitas yang lebih rendah.
+
+    Urutan prioritas dari yang tertinggi hingga terendah adalah sebagai berikut:
+
+        - !important: Aturan yang ditandai dengan !important akan menimpa semua aturan lainnya, terlepas dari spesifisitasnya.         Penggunaannya sebaiknya dihindari kecuali dalam keadaan terdesak karena dapat membuat proses debugging menjadi sulit.
+
+        - Inline Styles: CSS yang ditulis langsung pada atribut style di dalam tag HTML.
+
+        - ID Selector: Aturan yang menargetkan elemen berdasarkan id-nya.
+
+        - Class, Attribute, dan Pseudo-class Selectors: Aturan yang menargetkan elemen berdasarkan class, atribut, atau pseudo-class (seperti :hover, :focus).
+
+        - Element dan Pseudo-element Selectors: Aturan yang menargetkan nama tag HTML atau pseudo-element (seperti ::before, ::after).
+
+    Jika dua aturan memiliki spesifisitas yang sama, maka aturan yang didefinisikan terakhir di dalam file CSS akan menjadi pemenangnya.
+
+
+
+2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+
+    Responsive Design adalah sebuah pendekatan dalam pengembangan web yang membuat halaman web dapat beradaptasi dan tampil dengan baik di berbagai ukuran layar dan perangkat, mulai dari desktop besar hingga smartphone kecil.
+
+    Konsep ini sangat penting karena beberapa alasan utama:
+
+        - Peningkatan Pengalaman Pengguna (User Experience): Pengguna dapat mengakses konten dengan nyaman tanpa harus melakukan zoom atau scroll horizontal yang merepotkan.
+
+        - Jangkauan Audiens yang Lebih Luas: Sebagian besar lalu lintas internet saat ini berasal dari perangkat mobile. Tanpa desain yang responsif, kamu akan kehilangan banyak calon pengguna.
+
+        - Peningkatan SEO (Search Engine Optimization): Mesin pencari seperti Google memprioritaskan situs yang mobile-friendly dalam hasil pencariannya.
+
+        - Efisiensi dalam Pengembangan dan Pemeliharaan: Kamu hanya perlu mengelola satu basis kode untuk semua perangkat, bukan membuat versi terpisah untuk desktop dan mobile.
+
+3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
+    Ketiga properti ini adalah komponen fundamental dari CSS Box Model, yang mendefinisikan bagaimana elemen HTML dirender sebagai kotak di halaman web.
+
+    - Padding (Bantalan): Merupakan ruang transparan di dalam border yang mengelilingi konten (teks, gambar). Padding berfungsi untuk memberikan jarak antara konten dan border.
+
+    - Border (Garis Tepi): Adalah garis yang mengelilingi padding dan konten. Border bisa memiliki ketebalan, gaya (misalnya, solid, dashed), dan warna.
+
+    - Margin (Jarak): Merupakan ruang transparan di luar border. Margin berfungsi untuk memberikan jarak antara elemen tersebut dengan elemen lain di sekitarnya.
+
+    Cara pengimplimentasian:
+
+            .box {
+        /* Padding */
+        padding: 20px; /* 20px di semua sisi */
+        padding-top: 10px; /* Hanya di sisi atas */
+
+        /* Border */
+        border: 2px solid black; /* Ketebalan 2px, gaya solid, warna hitam */
+        border-left-color: blue; /* Mengubah warna border kiri */
+
+        /* Margin */
+        margin: 15px; /* 15px di semua sisi */
+        margin-bottom: 30px; /* Hanya di sisi bawah */
+        }
+
+4.  Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
+    Flexbox dan Grid adalah dua model tata letak (layout) modern di CSS yang digunakan untuk mengatur dan menyusun elemen di halaman web.
+
+    Flexbox (Flexible Box Layout)
+
+        - Konsep: Model tata letak satu dimensi. Artinya, flexbox dirancang untuk mengatur elemen dalam satu baris (horizontal) atau satu kolom (vertikal) pada satu waktu.
+
+        - Kegunaan: Sangat ideal untuk komponen-komponen kecil dalam aplikasi.
+
+            * Membuat navigation bar di mana semua item menu tersusun rapi.
+
+            * Menengahkan elemen secara vertikal dan horizontal dengan mudah.
+
+            * Mengatur item di dalam sebuah card (misalnya, gambar, judul, dan tombol).
+
+            * Mendistribusikan ruang kosong di antara item secara merata.
+
+    Flexbox (Flexible Box Layout)
+
+        - Konsep: Model tata letak dua dimensi. Artinya, grid dirancang untuk mengatur elemen dalam baris dan kolom secara bersamaan, seperti tabel atau papan catur.
+
+        - Kegunaan: Sempurna untuk tata letak halaman secara keseluruhan.
+
+            * Membuat layout halaman web yang kompleks dengan header, sidebar, konten utama, dan footer.
+
+            * Membuat galeri gambar yang tersusun rapi dalam kotak-kotak.
+
+            * Mendesain dashboard dengan banyak widget yang perlu disejajarkan dalam grid.
+
+    Perbedaan Utama: Gunakan Flexbox untuk mengatur konten di dalam sebuah komponen (satu dimensi). Gunakan Grid untuk mengatur tata letak komponen-komponen tersebut di halaman (dua dimensi).
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+    Berikut adalah langkah-langkah yang saya lakukan untuk menyelesaikan checklist tugas ini:
+
+        - Analisis Kebutuhan dan Pemilihan Framework:
+
+            Langkah pertama adalah memahami semua poin pada checklist. Saya memutuskan untuk menggunakan Bootstrap 5 sebagai CSS framework karena kemudahannya dalam membuat desain yang responsif, terutama untuk card, form, dan navbar, sehingga mempercepat proses pengembangan.
+
+        - Implementasi Fungsi Edit dan Hapus (Backend):
+
+            * Saya membuat dua fungsi baru di views.py: edit_product dan delete_product.
+
+            * Saya menambahkan URL path yang sesuai di urls.py untuk kedua fungsi tersebut, dengan menyertakan <int:id> untuk menargetkan produk spesifik.
+
+            * Untuk fungsi edit_product, saya menggunakan kembali form yang sudah ada (ProductForm) dan mengisinya dengan data produk yang ada saat diakses (metode GET). Logika penyimpanan perubahan diimplementasikan pada metode POST.
+
+            * Untuk fungsi delete_product, saya membuat sebuah halaman konfirmasi sederhana (delete_confirm.html) untuk memastikan pengguna tidak salah menekan tombol hapus.
+
+        - Kustomisasi Halaman dan Desain Responsif:
+
+            * Main Layout (base.html): Saya mengintegrasikan Bootstrap 5 dengan menambahkan link CDN CSS dan JS ke dalam file base.html. Saya juga membuat struktur dasar yang akan diwarisi oleh template lain.
+
+            * Navbar: Saya mengimplementasikan komponen navbar dari Bootstrap. Komponen ini sudah responsive secara default. Saya hanya perlu menyesuaikan nama aplikasi ("Football Shop"), menambahkan nama pengguna yang sedang login, dan menyisipkan tombol logout.
+
+            * Halaman Login, Register, Tambah/Edit Produk: Saya menggunakan komponen form dari Bootstrap untuk menata input field dan button agar terlihat lebih modern dan rapi. Saya membungkusnya dalam sebuah container dan card agar terlihat terpusat dan bersih.
+
+        - Halaman Daftar Produk:
+
+            * Saya menerapkan logika percabangan di dalam template HTML menggunakan {% if products %}.
+
+            * Jika Produk Ada: Saya melakukan looping {% for product in products %} dan menampilkan setiap produk menggunakan komponen card Bootstrap. Di dalam setiap card, saya menambahkan dua tombol (<a> tag yang diberi kelas btn): satu mengarah ke URL edit_product dan satu lagi ke delete_product, dengan menyertakan ID produk. Saya menggunakan grid layout Bootstrap (row dan col) untuk membuat card-card ini responsif.
+
+            * Jika Produk Kosong: Di dalam blok {% else %}, saya menampilkan sebuah gambar (placeholder) dan pesan "Belum ada produk yang terdaftar." yang diletakkan di tengah halaman.

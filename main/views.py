@@ -46,37 +46,41 @@ def register(request):
 
 @login_required(login_url='/login')
 def show_main(request):
-    # Get filter parameter from the URL
     filter_param = request.GET.get('filter', None)
     
-    # Filter items based on parameter
     if filter_param == 'my_items':
-        # Show only the current user's items
         shop_list = Product.objects.filter(user=request.user)
     else:
-        # Show all items
         shop_list = Product.objects.all()
     
+    categories = Product.CATEGORY_CHOICES
+    
+    category_filter = request.GET.get('category')
+    if category_filter:
+        shop_list = Product.objects.filter(category=category_filter)
+    else:
+        shop_list = Product.objects.all()
+
     context = {
         'npm': '2406496422',
         'name': request.user.username,
         'class': 'PBP E',
-        # Ubah product_list menjadi shop_list
         'shop_list': shop_list,
         'last_login': request.COOKIES.get('last_login', 'Never'),
         'page_title': 'Home - Football Shop',
         'current_year': datetime.now().year,
+        'product_categories': categories,
     }
     return render(request, "main.html", context)
 
 def create_items(request):
-    form = ProductForm(request.POST or None)
+    # Perubahan di sini: tambahkan request.FILES
+    form = ProductForm(request.POST or None, request.FILES or None)
 
     if form.is_valid() and request.method == 'POST':
         product = form.save(commit=False)
         product.user = request.user
         product.save()
-        # Redirect ke halaman utama setelah berhasil membuat produk
         return redirect('main:show_main')
 
     context = {
@@ -92,12 +96,10 @@ def delete_item(request, id):
 
 @login_required(login_url='/login')
 def show_product(request, id):
-    # Get the item by ID
     items = get_object_or_404(Product, pk=id)
     
-    # Increment the view count field
     items.view_count += 1
-    items.save(update_fields=['view_count'])  # Only save the view_count field
+    items.save(update_fields=['view_count'])  
     
     context = {
         'items': items,
@@ -138,3 +140,18 @@ def show_shop(request):
         'products': products,
     }
     return render(request, "shop.html", context)
+
+def edit_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    # Perubahan di sini: tambahkan request.FILES
+    form = ProductForm(request.POST or None, request.FILES or None, instance=product)
+
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form,
+        'page_title': 'Edit Product - Football Shop',
+    }
+    return render(request, "edit_product.html", context)
