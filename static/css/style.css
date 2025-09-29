@@ -1,11 +1,11 @@
 :root {
-  --primary-color: #0d47a1; /* Darker Blue */
+  --primary-color: #0d47a1; 
   --secondary-color: #1565c0;
-  --accent-color: #ffca28; /* Yellow Accent */
-  --text-color: #212121; /* Dark Grey */
-  --bg-gradient-start: #e3f2fd; /* Light Blue */
+  --accent-color: #ffca28; 
+  --text-color: #212121; 
+  --bg-gradient-start: #e3f2fd; 
   --bg-gradient-end: #bbdefb;
-  --card-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Deeper Shadow */
+  --card-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); 
 }
 
 body {
@@ -15,10 +15,10 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden; 
 }
 
-/* Animated Background */
+
 body::before {
   content: "";
   position: fixed;
@@ -47,12 +47,12 @@ body::before {
   max-width: 1200px;
   margin: 0 auto;
   padding: 3rem;
-  position: relative; /* Needed for z-index */
+  position: relative; 
 }
 
-/* Header and Navigation */
+
 header {
-  background: rgba(255, 255, 255, 0.8); /* Glass Effect */
+  background: rgba(255, 255, 255, 0.8); 
   backdrop-filter: blur(10px);
   color: var(--primary-color);
   padding: 1.5rem 0;
@@ -106,9 +106,9 @@ nav a:hover::after {
   transform-origin: left;
 }
 
-/* Product Cards */
+
 .product-card {
-  background: rgba(255, 255, 255, 0.9); /* Glass Effect */
+  background: rgba(255, 255, 255, 0.9); 
   backdrop-filter: blur(10px);
   border-radius: 12px;
   overflow: hidden;
@@ -144,7 +144,7 @@ nav a:hover::after {
   font-size: 1.4rem;
 }
 
-/* Buttons */
+
 button, .btn {
   background-color: var(--secondary-color);
   color: white;
@@ -182,9 +182,9 @@ button:hover, .btn:hover {
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Product Detail Page */
+
 .product-detail {
-  background: rgba(255, 255, 255, 0.9); /* Glass Effect */
+  background: rgba(255, 255, 255, 0.9); 
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 3rem;
@@ -199,9 +199,9 @@ button:hover, .btn:hover {
   animation: fadeInUp 0.8s ease-out;
 }
 
-/* Forms */
+
 form {
-  background: rgba(255, 255, 255, 0.9); /* Glass Effect */
+  background: rgba(255, 255, 255, 0.9); 
   backdrop-filter: blur(10px);
   padding: 3rem;
   border-radius: 12px;
@@ -233,7 +233,7 @@ input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
-/* Auth Pages */
+
 .auth-container {
   display: flex;
   justify-content: center;
@@ -242,7 +242,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .auth-form {
-  background: rgba(255, 255, 255, 0.95); /* Glass Effect */
+  background: rgba(255, 255, 255, 0.95); 
   backdrop-filter: blur(12px);
   padding: 3.5rem;
   border-radius: 12px;
@@ -259,7 +259,7 @@ input:focus, textarea:focus, select:focus {
   font-size: 2rem;
 }
 
-/* Animations */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -313,7 +313,7 @@ input:focus, textarea:focus, select:focus {
   }
 }
 
-/* Messages and Alerts */
+
 .messages {
   list-style: none;
   padding: 0;
@@ -351,7 +351,7 @@ input:focus, textarea:focus, select:focus {
   }
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .container {
     padding: 2rem;

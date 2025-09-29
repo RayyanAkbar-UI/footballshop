@@ -4,14 +4,12 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 class Product(models.Model):
-    # 1. Definisikan konstanta untuk pilihan kategori
     JERSEY = 'Jersey'
     SHOES = 'Shoes'
     BALL = 'Ball'
     ACCESSORIES = 'Accessories'
     BAGS = 'Bags'
 
-    # 2. Buat daftar pilihan (choices) yang akan digunakan oleh Django
     CATEGORY_CHOICES = [
         (JERSEY, 'Jersey'),
         (SHOES, 'Shoes'),
@@ -26,14 +24,12 @@ class Product(models.Model):
     description = models.TextField()
     quantity = models.PositiveIntegerField()
     
-    # 3. Hubungkan field 'category' dengan daftar pilihan yang baru dibuat
     category = models.CharField(
         max_length=50,
         choices=CATEGORY_CHOICES,
         default=JERSEY
     )
     
-    # TAMBAHKAN KEMBALI FIELD GAMBAR
     image = models.ImageField(upload_to='products/', null=True, blank=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -43,7 +39,6 @@ class Product(models.Model):
         return self.name
     
     def formatted_price(self):
-        """Return the price formatted as currency string."""
         try:
             price_value = int(self.price)
             price_str = str(price_value)

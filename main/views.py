@@ -17,20 +17,21 @@ def logout_user(request):
     return response
 
 def login_user(request):
-   if request.method == 'POST':
-      form = AuthenticationForm(data=request.POST)
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
 
-      if form.is_valid():
+        if form.is_valid():
             user = form.get_user()
             login(request, user)
-            response = HttpResponseRedirect(reverse("main:show_main"))
+            
+            response = HttpResponseRedirect(reverse('main:show_main'))
             response.set_cookie('last_login', str(datetime.now()))
             return response
 
-   else:
-      form = AuthenticationForm(request)
-   context = {'form': form}
-   return render(request, 'login.html', context)
+    else:
+        form = AuthenticationForm(request)
+    context = {'form': form}
+    return render(request, 'login.html', context)
 
 def register(request):
     form = UserCreationForm()
@@ -74,7 +75,6 @@ def show_main(request):
     return render(request, "main.html", context)
 
 def create_items(request):
-    # Perubahan di sini: tambahkan request.FILES
     form = ProductForm(request.POST or None, request.FILES or None)
 
     if form.is_valid() and request.method == 'POST':
@@ -143,7 +143,6 @@ def show_shop(request):
 
 def edit_product(request, id):
     product = get_object_or_404(Product, id=id)
-    # Perubahan di sini: tambahkan request.FILES
     form = ProductForm(request.POST or None, request.FILES or None, instance=product)
 
     if form.is_valid() and request.method == 'POST':

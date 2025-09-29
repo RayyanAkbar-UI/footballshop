@@ -9,7 +9,7 @@
             <form method="POST" class="space-y-6" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                <!-- Loop untuk field Name, Price, dan Description -->
+                
                 {% for field in form %}
                     {% if field.name != 'category' %}
                     <div>
