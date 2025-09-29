@@ -45,7 +45,7 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
-@login_required(login_url='/login')
+@login_required()
 def show_main(request):
     filter_param = request.GET.get('filter', None)
     
@@ -94,7 +94,7 @@ def delete_item(request, id):
     product.delete()
     return redirect('main:show_main')
 
-@login_required(login_url='/login')
+@login_required()
 def show_product(request, id):
     items = get_object_or_404(Product, pk=id)
     
