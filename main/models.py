@@ -54,14 +54,3 @@ class Product(models.Model):
             if digits_only:
                 return self.formatted_price(int(digits_only))
             return "Price unavailable"
-
-class Book(models.Model):
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=255)
-
-class Author(models.Model):
-
-    bio = models.TextField()
-    books = models.ManyToManyField(Book)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -45,22 +45,21 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
-@login_required()
+@login_required(login_url='/login/')
 def show_main(request):
     filter_param = request.GET.get('filter', None)
+    category_filter = request.GET.get('category')
     
-    if filter_param == 'my_items':
+    if filter_param == 'my_items'and request.user.is_authenticated:  
         shop_list = Product.objects.filter(user=request.user)
     else:
         shop_list = Product.objects.all()
     
+    if category_filter:
+        shop_list = shop_list.filter(category=category_filter)
+
     categories = Product.CATEGORY_CHOICES
     
-    category_filter = request.GET.get('category')
-    if category_filter:
-        shop_list = Product.objects.filter(category=category_filter)
-    else:
-        shop_list = Product.objects.all()
 
     context = {
         'npm': '2406496422',
@@ -94,7 +93,7 @@ def delete_item(request, id):
     product.delete()
     return redirect('main:show_main')
 
-@login_required()
+@login_required(login_url='/login/')
 def show_product(request, id):
     items = get_object_or_404(Product, pk=id)
     
