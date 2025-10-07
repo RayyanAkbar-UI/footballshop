@@ -1,0 +1,185 @@
+{% load static %}
+
+<!-- Product Form Modal -->
+<div id="productModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-black/50 backdrop-blur-sm">
+  <div id="productModalContent" class="glass w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto rounded-xl" style="max-width: 700px;">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 border-b border-white/10">
+      <div>
+        <h3 class="text-xl font-semibold text-white" id="modalTitle">
+          Create New Product
+        </h3>
+        <p class="text-sm text-white/70 mt-1" id="modalDescription">Add a new football product to your shop</p>
+      </div>
+      <button type="button" class="text-white/70 hover:text-white bg-transparent hover:bg-white/10 rounded-lg text-sm p-1.5 inline-flex items-center" onclick="hideModal()">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Modal body -->
+    <div class="px-6 py-4 space-y-6">
+      <form id="productForm">
+        <input type="hidden" id="product_id" name="product_id">
+        {% csrf_token %}
+        
+        <div class="mb-4">
+          <label for="name" class="block text-sm font-medium text-white/80">Product Name</label>
+          <input type="text" id="name" name="name" class="mt-1 block w-full" required>
+        </div>
+        
+        <div class="mb-4">
+          <label for="price" class="block text-sm font-medium text-white/80">Price (Rp)</label>
+          <input type="text" id="price" name="price" class="mt-1 block w-full" placeholder="e.g. 500000" required>
+        </div>
+        
+        <div class="mb-4">
+          <label for="description" class="block text-sm font-medium text-white/80">Description</label>
+          <textarea id="description" name="description" rows="3" class="mt-1 block w-full" required></textarea>
+        </div>
+        
+        <div class="mb-4">
+          <label for="quantity" class="block text-sm font-medium text-white/80">Quantity</label>
+          <input type="number" id="quantity" name="quantity" min="1" class="mt-1 block w-full" required>
+        </div>
+        
+        <div class="mb-4">
+          <label for="category" class="block text-sm font-medium text-white/80">Category</label>
+          <select id="category" name="category" class="mt-1 block w-full" required>
+            <option value="">Select category</option>
+            <option value="Jersey">Jersey</option>
+            <option value="Shoes">Shoes</option>
+            <option value="Ball">Balls</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Bags">Bags</option>
+          </select>
+        </div>
+        
+        <div class="mb-4">
+          <label for="image" class="block text-sm font-medium text-white/80">Image URL</label>
+          <input type="url" id="image" name="image" class="mt-1 block w-full" placeholder="https://example.com/image.jpg">
+        </div>
+      </form>
+    </div>
+    
+    <!-- Modal footer -->
+    <div class="flex flex-col sm:flex-row gap-4 p-6 border-t border-white/10 rounded-b">
+      <button type="button" class="order-2 sm:order-1 px-6 py-3 border border-white/20 text-white rounded-md font-medium hover:bg-white/10 transition-colors text-center" onclick="hideModal()">Cancel</button>
+      <button type="button" id="saveProductBtn" class="order-1 sm:order-2 flex-1 bg-purple-600/80 text-white px-6 py-3 rounded-md font-medium hover:bg-purple-700/80 transition-colors">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-black/50 backdrop-blur-sm">
+  <div id="deleteModalContent" class="glass w-11/12 max-w-md rounded-xl">
+    <div class="p-6">
+      <div class="text-center">
+        <svg class="mx-auto mb-4 w-14 h-14 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h3 class="mb-5 text-lg font-semibold text-white">Confirm Delete</h3>
+        <p class="text-white/80 mb-5">Are you sure you want to delete this product? This action cannot be undone.</p>
+        <input type="hidden" id="deleteProductId">
+        <div class="flex justify-center gap-4">
+          <button type="button" class="px-5 py-2.5 border border-white/20 text-white rounded-md font-medium hover:bg-white/10 transition-colors" onclick="hideDeleteModal()">
+            No, cancel
+          </button>
+          <button type="button" class="px-5 py-2.5 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 transition-colors" id="confirmDeleteBtn">
+            Yes, delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal functions
+  function showModal(mode = 'create', productData = null) {
+    const modal = document.getElementById('productModal');
+    const modalContent = document.getElementById('productModalContent');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const productIdField = document.getElementById('product_id');
+    const form = document.getElementById('productForm');
+    
+    // Set modal title based on mode
+    if (mode === 'edit' && productData) {
+      modalTitle.textContent = 'Edit Product';
+      modalDescription.textContent = 'Update your product information';
+      productIdField.value = productData.id;
+      
+      // Fill form with product data
+      document.getElementById('name').value = productData.name;
+      document.getElementById('price').value = productData.price;
+      document.getElementById('description').value = productData.description;
+      document.getElementById('quantity').value = productData.quantity;
+      document.getElementById('category').value = productData.category;
+      document.getElementById('image').value = productData.image || '';
+    } else {
+      modalTitle.textContent = 'Create New Product';
+      modalDescription.textContent = 'Add a new football product to your shop';
+      form.reset();
+      productIdField.value = '';
+    }
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modalContent.classList.add('scale-100', 'opacity-100');
+      modalContent.classList.remove('scale-95', 'opacity-0');
+    }, 50);
+  }
+
+  function hideModal() {
+    const modal = document.getElementById('productModal');
+    const modalContent = document.getElementById('productModalContent');
+    
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  }
+  
+  function showDeleteModal(productId) {
+    const modal = document.getElementById('deleteModal');
+    const modalContent = document.getElementById('deleteModalContent');
+    document.getElementById('deleteProductId').value = productId;
+    
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modalContent.classList.add('scale-100', 'opacity-100');
+      modalContent.classList.remove('scale-95', 'opacity-0');
+    }, 50);
+  }
+  
+  function hideDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    const modalContent = document.getElementById('deleteModalContent');
+    
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  }
+  
+  // Setup event listeners
+  document.getElementById('saveProductBtn').addEventListener('click', saveProduct);
+  document.getElementById('confirmDeleteBtn').addEventListener('click', deleteProduct);
+  
+  // These functions will be implemented in main.html
+  function saveProduct() {
+    // Will be implemented in main.html
+    console.log('Save product function needs to be implemented');
+  }
+  
+  function deleteProduct() {
+    // Will be implemented in main.html
+    console.log('Delete product function needs to be implemented');
+  }
+</script>

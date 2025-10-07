@@ -26,73 +26,288 @@
                 </div>
             </div>
 
-            
-            <div x-data="{ open: false }" class="relative inline-block text-left">
-                <div>
-                    <button @click="open = !open" type="button" class="glass-button inline-flex justify-center w-full rounded-md border border-white/20 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500">
-                        Actions & Categories
-                        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
+            <div class="flex flex-wrap items-center gap-4 mb-4">
+                <!-- Create Product Button -->
+                {% if user.is_authenticated %}
+                <button onclick="showModal('create')" class="action-link bg-purple-900/20 hover:bg-purple-900/30">
+                    <span class="mr-2">➕</span> Add New Product
+                </button>
+                {% endif %}
+                
+                <!-- Filter Buttons -->
+                <div x-data="{ open: false }" class="relative inline-block text-left">
+                    <div>
+                        <button @click="open = !open" type="button" class="glass-button inline-flex justify-center rounded-md border border-white/20 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500">
+                            Filter Products
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
 
-                <div x-show="open" @click.away="open = false"
-                     x-transition
-                     class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg glass ring-1 ring-white ring-opacity-20 focus:outline-none"
-                     role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                    <div class="py-1" role="none">
-                        <a href="{% url 'main:show_main' %}" class="text-gray-300 hover:bg-white/10 hover:text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1">All Products</a>
-                        <a href="{% url 'main:show_main' %}?filter=my_items" class="text-gray-300 hover:bg-white/10 hover:text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1">My Products</a>
-                        <a href="{% url 'main:create_items' %}" class="text-green-400 hover:bg-green-500/20 hover:text-green-300 block px-4 py-2 text-sm" role="menuitem" tabindex="-1">Create New Product</a>
+                    <div x-show="open" @click.away="open = false"
+                         x-transition
+                         class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg glass ring-1 ring-white ring-opacity-20 focus:outline-none"
+                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                        <div class="py-1" role="none">
+                            <a href="#" onclick="filterProducts('all'); return false;" class="text-gray-300 hover:bg-white/10 hover:text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1">All Products</a>
+                            <a href="#" onclick="filterProducts('my'); return false;" class="text-gray-300 hover:bg-white/10 hover:text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1">My Products</a>
+                            {% for value, label in product_categories %}
+                                <a href="#" onclick="filterProducts('category', '{{ value }}'); return false;" class="text-gray-300 hover:bg-white/10 hover:text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1">{{ label }}</a>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
+                
+                <!-- Refresh Button -->
+                <button onclick="fetchProducts()" class="action-link">
+                    <span class="mr-2">🔄</span> Refresh
+                </button>
             </div>
 
             <p class="text-xs opacity-70 mt-4">Last connected: {{ last_login }}</p>
         </div>
     </div>
 
-    <div class="card-container mt-8">
-        {% if not shop_list %}
-        <div class="col-span-full text-center glass rounded-xl p-8">
-            <img src="{% static 'image/no-product.png' %}" 
-                 class="mx-auto h-40 w-40 opacity-50" 
-                 alt="No products found">
-            <h2 class="mt-6 text-xl font-semibold text-white">No Products Yet</h2>
-            <p class="mt-2 text-sm text-gray-400">Check back later or add a new product!</p>
-        </div>
-        {% else %}
-            {% for item in shop_list %}
-            <div class="glass card-hover">
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-48 object-cover rounded-t-xl">
-                {% else %}
-                    <div class="w-full h-48 bg-gray-800 rounded-t-xl flex items-center justify-center">
-                        <span class="text-gray-500">No Image</span>
-                    </div>
-                {% endif %}
-                <div class="p-4">
-                    <h2 class="text-xl font-bold mb-3">
-                        <a href="{% url 'main:show_product' item.id %}" class="hover:text-white">
-                            {{ item.name }}
-                        </a>
-                    </h2>
-                    
-                    <p class="mb-2"><strong>Price:</strong> {{ item.formatted_price }}</p>
-                    <p class="text-sm mb-4 opacity-70 line-clamp-3">{{ item.description }}</p>
-                    
-                    <div class="card-footer">
-                        <span class="badge">Stock: {{ item.quantity }}</span>
-                        <a href="{% url 'main:show_product' item.id %}" 
+    <!-- Loading State -->
+    <div id="loading-state" class="text-center p-8 hidden">
+        <div class="inline-block animate-spin h-10 w-10 border-4 border-t-purple-500 border-white/20 rounded-full mb-4"></div>
+        <p class="text-white/70">Loading products...</p>
+    </div>
+    
+    <!-- Error State -->
+    <div id="error-state" class="glass rounded-xl p-8 text-center hidden">
+        <div class="text-red-500 text-5xl mb-4">⚠️</div>
+        <h3 class="text-xl font-bold mb-2">Something went wrong</h3>
+        <p class="text-white/70 mb-6">We couldn't load the products. Please try again.</p>
+        <button onclick="fetchProducts()" class="action-link bg-purple-900/20 hover:bg-purple-900/30">
+            Try Again
+        </button>
+    </div>
+    
+    <!-- Empty State -->
+    <div id="empty-state" class="glass rounded-xl p-8 text-center hidden">
+        <img src="{% static 'image/no-product.png' %}" 
+             class="mx-auto h-40 w-40 opacity-50" 
+             alt="No products found">
+        <h3 class="text-xl font-bold mt-6 mb-2">No Products Yet</h3>
+        <p class="text-white/70 mb-6">Add your first product to get started!</p>
+        {% if user.is_authenticated %}
+        <button onclick="showModal('create')" class="action-link bg-purple-900/20 hover:bg-purple-900/30">
+            <span class="mr-2">➕</span> Add New Product
+        </button>
+        {% endif %}
+    </div>
+
+    <div id="products-grid" class="card-container mt-8">
+        <!-- Products will be displayed here -->
+    </div>
+</div>
+
+<script>
+// Global variables
+const CURRENT_USER_ID = "{{ user.id|default_if_none:'' }}";
+let currentFilter = {
+    type: 'all',
+    value: null
+};
+let allProducts = [];
+
+// Show/hide page sections
+function setPageState(state) {
+    document.getElementById('loading-state').classList.toggle('hidden', state !== 'loading');
+    document.getElementById('error-state').classList.toggle('hidden', state !== 'error');
+    document.getElementById('empty-state').classList.toggle('hidden', state !== 'empty');
+    document.getElementById('products-grid').classList.toggle('hidden', state !== 'products');
+}
+
+// Filter products
+function filterProducts(type, value = null) {
+    currentFilter = { type, value };
+    
+    let filteredProducts;
+    
+    if (type === 'all') {
+        filteredProducts = [...allProducts];
+    } else if (type === 'my') {
+        filteredProducts = allProducts.filter(product => String(product.user_id) === CURRENT_USER_ID);
+    } else if (type === 'category') {
+        filteredProducts = allProducts.filter(product => product.category === value);
+    }
+    
+    if (filteredProducts.length === 0) {
+        setPageState('empty');
+    } else {
+        renderProducts(filteredProducts);
+        setPageState('products');
+    }
+}
+
+// Render products to the grid
+function renderProducts(products) {
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = '';
+    
+    const productUrlTemplate = "{% url 'main:show_product' 999999999 %}";
+
+    products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'glass card-hover';
+        const productUrl = productUrlTemplate.replace('999999999', product.id);
+
+        card.innerHTML = DOMPurify.sanitize(`
+            ${product.image ? 
+                `<img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover rounded-t-xl">` : 
+                `<div class="w-full h-48 bg-gray-800 rounded-t-xl flex items-center justify-center">
+                    <span class="text-gray-500">No Image</span>
+                </div>`
+            }
+            <div class="p-4">
+                <h2 class="text-xl font-bold mb-3">
+                    <a href="${productUrl}" class="hover:text-white">
+                        ${product.name}
+                    </a>
+                </h2>
+                
+                <p class="mb-2"><strong>Price:</strong> ${product.formatted_price}</p>
+                <p class="text-sm mb-4 opacity-70 line-clamp-3">${product.description}</p>
+                
+                <div class="card-footer">
+                    <span class="badge">Stock: ${product.quantity}</span>
+                    <div class="flex gap-2">
+                        <a href="${productUrl}"
                            class="action-link">
-                            View Details →
+                            View
                         </a>
+                        ${String(product.user_id) === CURRENT_USER_ID ? `
+                            <button onclick="editProduct(${product.id})" class="action-link bg-blue-900/20 hover:bg-blue-900/30">
+                                Edit
+                            </button>
+                            <button onclick="showDeleteModal(${product.id})" class="action-link bg-red-900/20 hover:bg-red-900/30">
+                                Delete
+                            </button>
+                        ` : ''}
                     </div>
                 </div>
             </div>
-            {% endfor %}
-        {% endif %}
-    </div>
-</div>
+        `);
+        
+        grid.appendChild(card);
+    });
+}
+
+// Fetch products from the server
+async function fetchProducts() {
+    try {
+        setPageState('loading');
+        
+        const response = await fetch("{% url 'main:show_json' %}", {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        allProducts = data;
+        
+        // Apply current filter to the new data
+        filterProducts(currentFilter.type, currentFilter.value);
+        
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        setPageState('error');
+    }
+}
+
+// Edit product
+async function editProduct(productId) {
+    try {
+        const response = await fetch(`{% url 'main:get_product_json' 0 %}`.replace('0', productId), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const productData = await response.json();
+        showModal('edit', productData);
+        
+    } catch (error) {
+        console.error("Error fetching product details:", error);
+        showToast('Error', 'Failed to load product details', 'error');
+    }
+}
+
+// Override modal functions
+function saveProduct() {
+    const form = document.getElementById('productForm');
+    const formData = new FormData(form);
+    const productId = formData.get('product_id');
+    const isEdit = productId !== '';
+    
+    // URL for create or update
+    const url = isEdit ? 
+        `{% url 'main:update_product_ajax' 0 %}`.replace('0', productId) : 
+        "{% url 'main:add_product_ajax' %}";
+    
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status) {
+            hideModal();
+            showToast(
+                isEdit ? 'Product Updated' : 'Product Created', 
+                data.message, 
+                'success'
+            );
+            fetchProducts();
+        } else {
+            showToast('Error', data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error', 'Something went wrong', 'error');
+    });
+}
+
+function deleteProduct() {
+    const productId = document.getElementById('deleteProductId').value;
+    
+    fetch(`{% url 'main:delete_product_ajax' 0 %}`.replace('0', productId), {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status) {
+            hideDeleteModal();
+            showToast('Product Deleted', data.message, 'info');
+            fetchProducts();
+        } else {
+            showToast('Error', data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error', 'Something went wrong', 'error');
+    });
+}
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    fetchProducts();
+});
+</script>
 {% endblock content %}

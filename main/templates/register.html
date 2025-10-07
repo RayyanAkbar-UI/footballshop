@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>Register - Football Shop</title>
@@ -11,34 +12,30 @@
             <div class="glass rounded-xl p-6">
                 <h1 class="text-2xl font-bold mb-6 neural-glow text-center">Register</h1>
 
-                <form method="POST" class="space-y-4">
+                <form id="registerForm" class="space-y-4">
                     {% csrf_token %}
-                    {% for field in form %}
                     <div class="form-group">
-                        <label>{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <ul class="errorlist">
-                                {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
                     </div>
-                    {% endfor %}
                     
-                    <button type="submit" class="action-link w-full bg-purple-900/20 hover:bg-purple-900/30 py-3 mt-4">
+                    <div class="form-group">
+                        <label for="password1">Password</label>
+                        <input type="password" id="password1" name="password1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password2">Confirm Password</label>
+                        <input type="password" id="password2" name="password2" required>
+                    </div>
+                    
+                    <div id="error-message" class="text-red-400 text-sm hidden">
+                    </div>
+                    
+                    <button type="submit" id="registerButton" class="action-link w-full bg-purple-900/20 hover:bg-purple-900/30 py-3 mt-4">
                         Register
                     </button>
                 </form>
-
-                {% if messages %}
-                <div class="mt-4 p-3 glass rounded-xl">
-                    {% for message in messages %}
-                    <p class="text-green-400 text-sm">{{ message }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
                 
                 <p class="mt-4 text-center text-sm opacity-70">
                     Already have an account?
@@ -50,4 +47,52 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const registerForm = document.getElementById('registerForm');
+    const registerButton = document.getElementById('registerButton');
+    const errorMessage = document.getElementById('error-message');
+    
+    registerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        registerButton.disabled = true;
+        registerButton.innerHTML = '<span class="animate-pulse">Creating account...</span>';
+        errorMessage.classList.add('hidden');
+        
+        const formData = new FormData(registerForm);
+        
+        fetch("{% url 'main:register_ajax' %}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status) {
+                showToast('Registration Successful', 'Your account has been created!', 'success');
+                setTimeout(() => {
+                    window.location.href = "{% url 'main:login' %}";
+                }, 1500);
+            } else {
+                errorMessage.textContent = data.message;
+                errorMessage.classList.remove('hidden');
+                registerButton.disabled = false;
+                registerButton.textContent = 'Register';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            errorMessage.textContent = 'Something went wrong. Please try again.';
+            errorMessage.classList.remove('hidden');
+            registerButton.disabled = false;
+            registerButton.textContent = 'Register';
+        });
+    });
+});
+</script>
+{% endblock content %}
+    });
+});
+</script>
 {% endblock content %}
